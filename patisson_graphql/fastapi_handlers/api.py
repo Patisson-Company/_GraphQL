@@ -14,7 +14,7 @@ def wrapper(func: Callable, *args, **kwargs):
 async def graphql_server(request: Request, schema: GraphQLSchema,
                          session_gen: _AsyncGeneratorContextManager[AsyncSession]):
     data = await request.json()
-    async with session_gen() as session:
+    async with session_gen as session:
         success, result = await graphql(
             schema,
             data,
