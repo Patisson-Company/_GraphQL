@@ -2,7 +2,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='patisson_grqpal',
-    version='0.1.2',
+    version='0.2.0',
     packages=find_packages(),
     author='EliseyGodX',
     description='Tools for developing microservices using GraphQL (ariadne)',

@@ -51,16 +51,29 @@ class Stmt:
         return self
     
     
+    def not_con_filter(self, column: Column, ops: Optional[Iterable[Any]]) -> Self:
+        'not in'
+        if ops: self.stmt = self.stmt.filter(column.not_in(ops))
+        return self
+    
+    
     def con_model_filter(self, column: InstrumentedAttribute[Any], ops: Optional[Iterable[Any]]) -> Self:
         '"in" for relationship'
         if ops:
             self.stmt = self.stmt.filter(column.any(column.property.mapper.class_.name.in_(ops)))
-        return self
+        return self    
     
     
     def like_filter(self, column: Column, op: Optional[Iterable[Any]]) -> Self:
         'LIKE'
         if op: self.stmt = self.stmt.filter(column.like(op))
+        return self
+    
+        
+    def where_filter(self, column: InstrumentedAttribute[Any], op: Optional[Any]) -> Self:
+        'WHERE'
+        if op:
+            self.stmt = self.stmt.where(column == op)
         return self
     
     
