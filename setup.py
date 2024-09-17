@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(
-    name='patisson_grqpal',
+    name='patisson_graphql',
     version='0.2.0',
     packages=find_packages(),
     author='EliseyGodX',
