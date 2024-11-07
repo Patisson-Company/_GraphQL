@@ -1,0 +1,1 @@
+from patisson_graphql.fastapi_handlers.api import graphql_server
