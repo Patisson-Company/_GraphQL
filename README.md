@@ -27,18 +27,6 @@ Utilities tailored for specific frameworks. Currently, only FastAPI is supported
 - **`fastapi.py`**:
   - Functions and classes to set up GraphQL endpoints with FastAPI using Ariadne.
   - Includes schema loading, resolver injection, and customizable context handling.
-  - Example Usage:
-    ```python
-    from fastapi import FastAPI
-    from patisson_graphql.framework_utils.fastapi import create_graphql_route, resolvers, get_session
-
-    app = FastAPI()
-
-    app.add_api_route(
-        "/graphql",
-        create_graphql_route(resolvers=resolvers, session_gen=get_session)
-    )
-    ```
 
 ### 2. **`stmt_filter.py`**
 A utility for building SQLAlchemy `Select` statements with an intuitive, chainable API and integrated logging.
