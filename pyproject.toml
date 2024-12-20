@@ -1,0 +1,28 @@
+[tool.poetry]
+name = "patisson-graphql"
+version = "1.3.0"
+description = "tools for developing microservices using GraphQL"
+authors = ["EliseyGodX"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+sqlalchemy = "^2.0.36"
+ariadne = "^0.24.0"
+patisson-request = { git = "https://github.com/Patisson-Company/_Request", optional = true }
+fastapi = { version = "^0.115.6", optional = true }
+
+
+[tool.poetry.group.dev.dependencies]
+patisson-request = { git = "https://github.com/Patisson-Company/_Request" }
+fastapi = "^0.115.6"
+pytest = "^8.3.4"
+
+
+[tool.poetry.extras]
+fastapi-utils = ["fastapi", "patisson-request"]
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

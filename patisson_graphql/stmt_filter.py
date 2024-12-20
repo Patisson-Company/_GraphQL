@@ -155,7 +155,7 @@ class Stmt:
             self.log_list.append(f'{column.name} like {op}')
         return self
         
-    def where_filter(self, column: InstrumentedAttribute[Any], op: Optional[Any]) -> Self:
+    def where_filter(self, column: Column, op: Optional[Any]) -> Self:
         'WHERE'
         if op:
             self.stmt = self.stmt.where(column == op)
