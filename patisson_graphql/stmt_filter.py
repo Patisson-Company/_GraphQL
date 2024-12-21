@@ -1,5 +1,5 @@
 """
-SQLAlchemy Statement Builder with Logging
+SQLAlchemy Statement Builder with Logging.
 
 This module contains the `Stmt` class, which provides a fluent interface for constructing
 and filtering SQLAlchemy `Select` statements while maintaining a log of applied filters
@@ -93,70 +93,70 @@ class Stmt:
         return log
 
     def lte_filter(self, column: Column, op: Optional[Any]) -> Self:
-        '<='
+        """<="""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column <= op)
             self.log_list.append(f'{column.name} <= {op}')
         return self
 
     def gte_filter(self, column: Column, op: Optional[Any]) -> Self:
-        '>='
+        """>="""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column >= op)
             self.log_list.append(f'{column.name} >= {op}')
         return self
 
     def lt_filter(self, column: Column, op: Optional[Any]) -> Self:
-        '<'
+        """<"""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column < op)
             self.log_list.append(f'{column.name} < {op}')
         return self
 
     def gt_filter(self, column: Column, op: Optional[Any]) -> Self:
-        '>'
+        """>"""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column > op)
             self.log_list.append(f'{column.name} > {op}')
         return self
 
     def eq_filter(self, column: Column, op: Optional[Any]) -> Self:
-        '=='
+        """=="""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column == op)
             self.log_list.append(f'{column.name} == {op}')
         return self
 
     def con_filter(self, column: Column, ops: Optional[Iterable[Any]]) -> Self:
-        'in'
+        """'in"""  # noqa: D400
         if ops:
             self.stmt = self.stmt.filter(column.in_(ops))
             self.log_list.append(f'{column.name} in {ops}')
         return self
 
     def not_con_filter(self, column: Column, ops: Optional[Iterable[Any]]) -> Self:
-        'not in'
+        """not in"""  # noqa: D400, D403
         if ops:
             self.stmt = self.stmt.filter(column.not_in(ops))
             self.log_list.append(f'{column.name} not in {ops}')
         return self
 
     def con_model_filter(self, column: InstrumentedAttribute[Any], ops: Optional[Iterable[Any]]) -> Self:
-        '"in" for relationship'
+        """'in' for relationship"""  # noqa: D400
         if ops:
             self.stmt = self.stmt.filter(column.any(column.property.mapper.class_.name.in_(ops)))
             self.log_list.append(f'{column.name} relationship in {ops}')
         return self
 
     def like_filter(self, column: Column, op: Optional[Iterable[Any]]) -> Self:
-        'LIKE'
+        """LIKE"""  # noqa: D400
         if op:
             self.stmt = self.stmt.filter(column.like(op))
             self.log_list.append(f'{column.name} like {op}')
         return self
 
     def where_filter(self, column: Column, op: Optional[Any]) -> Self:
-        'WHERE'
+        """WHERE"""  # noqa: D400
         if op:
             self.stmt = self.stmt.where(column == op)
             self.log_list.append(f'{column.name} where {op}')

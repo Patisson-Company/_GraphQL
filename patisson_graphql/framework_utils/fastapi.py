@@ -1,6 +1,7 @@
 """
-This module provides utilities for integrating GraphQL functionality into a FastAPI application
-using the Ariadne library. It includes tools for schema creation, GraphQL request processing,
+This module provides utilities for integrating GraphQL functionality into a FastAPI application.
+
+Using the Ariadne library. It includes tools for schema creation, GraphQL request processing,
 and seamless database session management.
 
 Utilities:
@@ -31,19 +32,19 @@ from typing import Awaitable, Callable, Generic, Optional, TypeVar
 from ariadne import graphql, load_schema_from_path, make_executable_schema
 from fastapi import Request
 from graphql import GraphQLSchema
-from patisson_request.jwt_tokens import (ClientAccessTokenPayload,
-                                         ServiceAccessTokenPayload)
+from patisson_request.jwt_tokens import ClientAccessTokenPayload, ServiceAccessTokenPayload
 from pydantic import BaseModel
 from sqlalchemy.ext.asyncio import AsyncSession
 
-ServicePayloadTypeVar = TypeVar('ServicePayloadTypeVar', bound=Optional[ServiceAccessTokenPayload])
-UserPayloadTypeVar = TypeVar('UserPayloadTypeVar', bound=Optional[ClientAccessTokenPayload])
+ServicePayloadTypeVar = TypeVar("ServicePayloadTypeVar", bound=Optional[ServiceAccessTokenPayload])
+UserPayloadTypeVar = TypeVar("UserPayloadTypeVar", bound=Optional[ClientAccessTokenPayload])
 SessionGenType = Callable[..., _AsyncGeneratorContextManager[AsyncSession]]
 
 
 class GraphQLContext(BaseModel, Generic[ServicePayloadTypeVar, UserPayloadTypeVar]):
     """
     This class defines the base context for GraphQL resolvers in the application.
+
     It includes the essential attributes required during the execution of a GraphQL operation.
 
     Attributes:
@@ -65,6 +66,7 @@ class GraphQLContext(BaseModel, Generic[ServicePayloadTypeVar, UserPayloadTypeVa
         - Have a default value, such as `None`.
         - Be configurable either in a decorator wrapping the resolver or directly within the resolver.
     """
+
     request: Request
     db_session: AsyncSession
     service: ServicePayloadTypeVar = None  # type: ignore[reportAssignmentType]
@@ -75,11 +77,14 @@ class GraphQLContext(BaseModel, Generic[ServicePayloadTypeVar, UserPayloadTypeVa
 
 
 async def graphql_server(
-    request: Request, schema: GraphQLSchema, session_gen: _AsyncGeneratorContextManager,
-    context: type[GraphQLContext] = GraphQLContext, **kwargs
+    request: Request,
+    schema: GraphQLSchema,
+    session_gen: _AsyncGeneratorContextManager,
+    context: type[GraphQLContext] = GraphQLContext,
+    **kwargs
 ):
     """
-    This function serves as the main entry point for processing GraphQL requests.
+    Serve as the main entry point for processing GraphQL requests.
 
     Args:
         request (Request): The incoming HTTP request containing the GraphQL query and variables.
@@ -99,27 +104,26 @@ async def graphql_server(
     Returns:
         dict: The result of the GraphQL operation.
     """
-
     async with session_gen as session:
         success, result = await graphql(
-            schema, data=await request.json(),
-            context_value=context(
-                request=request,
-                db_session=session
-            ), **kwargs
+            schema,
+            data=await request.json(),
+            context_value=context(request=request, db_session=session),
+            **kwargs
         )
 
     return result
 
 
 def create_graphql_route(
-    resolvers: list, session_gen: SessionGenType,
-    path_to_schema: str = 'app/api/graphql/schema.graphql',
+    resolvers: list,
+    session_gen: SessionGenType,
+    path_to_schema: str = "app/api/graphql/schema.graphql",
     graphql_server: Callable[..., Awaitable] = graphql_server,
     **kwargs
 ):
     """
-    Creates a FastAPI route for handling GraphQL requests.
+    Create a FastAPI route for handling GraphQL requests.
 
     Args:
         resolvers (list): A list of resolvers for the GraphQL schema.
@@ -142,16 +146,10 @@ def create_graphql_route(
     Example:
         app.add_api_route('/graphql', create_graphql_route(resolvers, get_session), methods=["POST"])
     """
-
     type_defs = load_schema_from_path(path_to_schema)
     schema = make_executable_schema(type_defs, resolvers)
 
     async def graphql_route(request: Request):
-        return await graphql_server(
-            request=request,
-            schema=schema,
-            session_gen=session_gen(),
-            **kwargs
-        )
+        return await graphql_server(request=request, schema=schema, session_gen=session_gen(), **kwargs)
 
     return graphql_route

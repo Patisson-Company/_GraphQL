@@ -1,6 +1,7 @@
 import pytest
-from sqlalchemy import Column, Integer, String, MetaData, select
+from sqlalchemy import Column, Integer, MetaData, String, select
 from sqlalchemy.orm import declarative_base
+
 from patisson_graphql.stmt_filter import Stmt
 
 Base = declarative_base()

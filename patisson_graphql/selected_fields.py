@@ -10,8 +10,7 @@ from sqlalchemy.orm.attributes import InstrumentedAttribute
 
 def selected_fields(info: GraphQLResolveInfo, model) -> list[InstrumentedAttribute]:
     """
-    Extracts selected fields from a GraphQL query and maps them to the attributes of the given
-    SQLAlchemy model.
+    Extract selected fields from a GraphQL query and map them to the attributes of the given.
 
     Args:
         info (GraphQLResolveInfo): The GraphQL query resolution information.
